@@ -20,8 +20,12 @@
             <form class="text-left" action="/store" method="post">
                 @csrf
                 <div class="mb-3">
-                    <label for="pasteTextarea"></label>
-                    <textarea class="w-full h-56" name="pasteTextarea"></textarea>
+                    <p>Название пасты:</p>
+                    <input class="w-full bg-gray-300 rounded" type="text" name="title">
+                </div>
+                <div class="mb-3">
+                    <label for="content"></label>
+                    <textarea class="w-full h-56" name="content"></textarea>
                 </div>
                 <div class="mb-1 flex">
                     <label class="w-1/2" for="expiration_time">Срок действия пасты: </label>
