@@ -49,21 +49,31 @@
                 </button>
             </form>
         </div>
-        <div class="ml-2 w-80 bg-stone-200 min-h-96 text-center p-5 rounded text-center border-l-2 border-gray-500">
-            <h2 class="text-lg mb-5">Опубликованные пасты</h2>
-            <div class="mb-3 text-left">
-                <div class="">
-                    <p>Название</p>
-                    <p>Автор</p>
+        <div>
+            @if(isset($link))
+                <div class="ml-2 w-80 bg-stone-200  text-center p-5 rounded text-center border-l-2 border-gray-500">
+                    <h3 class="text-md mb-5">Ваша ссылка на пасту: </h3>
+                    <p>{{ $link }}</p>
                 </div>
-            </div>
-            <div class="mb-3 text-left">
-                <div class="">
-                    <p>Название</p>
-                    <p>Автор</p>
-                </div>
+            @endif
+
+            <div class="ml-2 overflow-auto w-80 bg-stone-200 min-h-96 max-h-96  text-center p-5 rounded text-center border-l-2 border-gray-500">
+                <h2 class="text-lg mb-5">Опубликованные последние пасты</h2>
+                @if(isset($posts))
+                    @foreach($posts as $item)
+                        <div class="mb-3 text-left border-b-2 border-gray-300">
+                            <div class="">
+                                <a href="{{ $item['link'] }}">{{ $item['title'] }}</a>
+                                <p>Неизвестный автор</p>
+                            </div>
+                        </div>
+                    @endforeach
+                @else
+                    <p>Ни одной пасты не создано</p>
+                @endif
             </div>
         </div>
+
     </div>
 </body>
 </html>

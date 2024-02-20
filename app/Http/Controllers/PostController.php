@@ -7,17 +7,57 @@ use Illuminate\Http\Request;
 
 class PostController extends Controller
 {
+    public function index()
+    {
+        $post = new Post();
+
+        $posts = $post
+            ->where('access', 'public')
+            ->latest()
+            ->limit(10)
+            ->get()
+            ->mapWithKeys(function ($item) {
+                return [
+                    $item->id => [
+                        "user_id" => 0,
+                        "title" => $item->title,
+                        "content" => $item->content,
+                        "expiration_time" => $item->expiration_time,
+                        "link" => $item->link,
+                        "access" => $item->access,
+                    ]
+                ];
+            })->toArray();
+
+        return view('welcome', ['posts' => $posts]);
+    }
+
     public function store(Request $request)
     {
-        Post::create([
+        $post = Post::create([
             'user_id' => 0,
             'title' => $request->title,
             'content' => $request->content,
             'expiration_time' => $request->expiration_time,
-            'link' => 3,
+            'link' => '',
             'access' => $request->access_paste,
-
         ]);
 
+        $post->update([
+            'link' => substr(md5($post->id), 0, 8),
+        ]);
+
+        return redirect('/');
+    }
+
+    public function show($hash)
+    {
+        $post = Post::where('link', $hash)->first();
+
+        if (!$post) {
+            abort(404);
+        }
+
+        return view('welcome', ['post' => $post]);
     }
 }
