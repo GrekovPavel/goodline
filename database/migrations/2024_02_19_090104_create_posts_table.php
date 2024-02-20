@@ -13,11 +13,11 @@ return new class extends Migration
     {
         Schema::create('posts', function (Blueprint $table) {
             $table->id();
-            $table->integer('user_id')->nullable()->default(null);
+            $table->foreignId('user_id')->nullable();
             $table->string('title');
             $table->text('content');
-            $table->integer('expiration_time')->nullable()->default(null);
-            $table->string('link');
+            $table->integer('expiration_time')->nullable();
+            $table->string('link')->default(null);
             $table->string('access')->default('public');
             $table->timestamps();
         });
