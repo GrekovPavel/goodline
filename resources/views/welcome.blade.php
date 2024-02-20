@@ -9,8 +9,7 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet"/>
-    @vite('resources/css/app.css')
-
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="bg-slate-100">
     <div class="flex items-center justify-center h-screen p-3">
