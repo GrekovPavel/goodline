@@ -21,10 +21,17 @@
                 <div class="mb-3">
                     <p>Название пасты:</p>
                     <input class="w-full bg-gray-300 rounded" type="text" name="title">
+                    @error('title')
+                    <div class="text-red-800">{{ $message }}</div>
+                    @enderror
                 </div>
+
                 <div class="mb-3">
                     <label for="content"></label>
                     <textarea class="w-full h-56" name="content"></textarea>
+                    @error('content')
+                    <div class="text-red-800">{{ $message }}</div>
+                    @enderror
                 </div>
                 <div class="mb-1 flex">
                     <label class="w-1/2" for="expiration_time">Срок действия пасты: </label>
