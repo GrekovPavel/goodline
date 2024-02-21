@@ -9,7 +9,7 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet"/>
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/css/prism.css', 'resources/js/prism.js'])
 </head>
 <body class="bg-slate-100">
     <div class="flex items-center justify-center h-screen p-3">
@@ -42,8 +42,16 @@
                 </div>
 
                 <div class="mb-3">
+                    <select id="language-select">
+                        <option value="html">HTML</option>
+                        <option value="css">CSS</option>
+                        <option value="javascript">JavaScript</option>
+                        <option value="php">PHP</option>
+                    </select>
+
                     <label for="content"></label>
-                    <textarea class="w-full h-56" name="content"></textarea>
+                    <textarea  id="code-input" class="w-full h-56" name="content"></textarea>
+                    <pre><code id="code-output"></code></pre>
                     @error('content')
                     <div class="text-red-800">{{ $message }}</div>
                     @enderror
@@ -112,5 +120,24 @@
             </div>
         @endif
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var languageSelect = document.getElementById('language-select');
+            var codeInput = document.getElementById('code-input');
+            var codeOutput = document.getElementById('code-output');
+
+            languageSelect.addEventListener('change', function() {
+                var selectedLanguage = languageSelect.value;
+                codeOutput.className = 'language-' + selectedLanguage;
+                Prism.highlightElement(codeOutput);
+            });
+
+            codeInput.addEventListener('input', function() {
+                var code = codeInput.value;
+                codeOutput.textContent = code;
+                Prism.highlightElement(codeOutput);
+            });
+        });
+    </script>
 </body>
 </html>
