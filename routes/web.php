@@ -17,7 +17,6 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [PostController::class, 'index'])->name('index');;
 Route::post('/store', [PostController::class, 'store']);
-Route::get('/{hash}', [PostController::class, 'show']);
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -30,3 +29,6 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__.'/auth.php';
+
+
+Route::get('/{hash}', [PostController::class, 'show']);

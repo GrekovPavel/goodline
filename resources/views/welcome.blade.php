@@ -13,6 +13,20 @@
 </head>
 <body class="bg-slate-100">
     <div class="flex items-center justify-center h-screen p-3">
+        <div class="min-h-96 text-center p-5 rounded">
+            <ul>
+                @if(!Auth::check())
+                    <li><a href="{{ route('login') }}">Войти в систему</a></li>
+                @else
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit" class="">
+                            Выйти из аккаунта
+                        </button>
+                    </form>
+                @endif
+            </ul>
+        </div>
         <div class="bg-stone-200 min-h-96 text-center p-5 rounded">
             <h1 class="text-xl mb-3 ">Новая паста</h1>
             <hr>
