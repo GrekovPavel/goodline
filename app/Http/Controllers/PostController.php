@@ -11,25 +11,7 @@ class PostController extends Controller
 {
     public function index()
     {
-        $post = new Post();
-
-        $posts = $post
-            ->where('access', 'public')
-            ->latest()
-            ->limit(10)
-            ->get()
-            ->mapWithKeys(function ($item) {
-                return [
-                    $item->id => [
-                        "user_id" => 0,
-                        "title" => $item->title,
-                        "content" => $item->content,
-                        "expiration_time" => $item->expiration_time,
-                        "link" => $item->link,
-                        "access" => $item->access,
-                    ]
-                ];
-            })->toArray();
+        $posts = $this->getPublicPosts();
 
         return view('welcome', ['posts' => $posts]);
     }
@@ -62,7 +44,7 @@ class PostController extends Controller
             DeleteExpiredPost::dispatch()->delay(now()->addMinutes($post->expiration_time));
         }
 
-        return redirect('/');
+        return redirect('/' . substr(md5($post->id), 0, 8));
     }
 
     public function show($hash)
@@ -73,6 +55,35 @@ class PostController extends Controller
             abort(404);
         }
 
-        return view('welcome', ['post' => $post]);
+        $postData = [
+            'title' => $post->title,
+            'content' => $post->content,
+        ];
+
+        $publicPosts = $this->getPublicPosts();
+
+        return view('paste', ['postData' => $postData, 'publicPosts' => $publicPosts]);
+    }
+
+    public function getPublicPosts() {
+        $post = new Post();
+
+        return $post
+            ->where('access', 'public')
+            ->latest()
+            ->limit(10)
+            ->get()
+            ->mapWithKeys(function ($item) {
+                return [
+                    $item->id => [
+                        "user_id" => 0,
+                        "title" => $item->title,
+                        "content" => $item->content,
+                        "expiration_time" => $item->expiration_time,
+                        "link" => $item->link,
+                        "access" => $item->access,
+                    ]
+                ];
+            })->toArray();
     }
 }
