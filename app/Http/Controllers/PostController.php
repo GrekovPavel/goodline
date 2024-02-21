@@ -14,7 +14,9 @@ class PostController extends Controller
     {
         $posts = $this->getPublicPosts();
 
-        return view('welcome', ['posts' => $posts]);
+        $userPosts = Auth::check() ? $this->getUserPosts() : [];
+
+        return view('welcome', ['posts' => $posts, 'userPosts' => $userPosts]);
     }
 
     public function store(Request $request)
@@ -43,7 +45,7 @@ class PostController extends Controller
             'link' => substr(md5($post->id), 0, 8),
         ]);
 
-        if($post->expiration_time) {
+        if ($post->expiration_time) {
             DeleteExpiredPost::dispatch()->delay(now()->addMinutes($post->expiration_time));
         }
 
@@ -54,7 +56,7 @@ class PostController extends Controller
     {
         $post = Post::where('link', $hash)->first();
 
-        if (!$post) {
+        if ((!$post) || $post->access == 'private' && $post->user_id != Auth::id()) {
             abort(404);
         }
 
@@ -65,14 +67,41 @@ class PostController extends Controller
 
         $publicPosts = $this->getPublicPosts();
 
-        return view('paste', ['postData' => $postData, 'publicPosts' => $publicPosts]);
+        $userPosts = Auth::check() ? $this->getUserPosts() : [];
+
+        return view('paste', ['postData' => $postData, 'publicPosts' => $publicPosts, 'userPosts' => $userPosts]);
     }
 
-    public function getPublicPosts() {
+    private function getPublicPosts()
+    {
         $post = new Post();
 
         return $post
             ->where('access', 'public')
+            ->latest()
+            ->limit(10)
+            ->get()
+            ->mapWithKeys(function ($item) {
+                return [
+                    $item->id => [
+                        "user_id" => $item->user_id,
+                        "user_name" => $item->user->name ?? "Гость",
+                        "title" => $item->title,
+                        "content" => $item->content,
+                        "expiration_time" => $item->expiration_time,
+                        "link" => $item->link,
+                        "access" => $item->access,
+                    ]
+                ];
+            })->toArray();
+    }
+
+    private function getUserPosts()
+    {
+        $post = new Post;
+
+        return $post
+            ->where('user_id', Auth::id())
             ->latest()
             ->limit(10)
             ->get()

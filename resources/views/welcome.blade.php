@@ -64,6 +64,9 @@
                     <select class="w-1/2 font-bold" id="access_paste" name="access_paste">
                         <option value="public">Доступна всем</option>
                         <option value="unlisted">Доступна только по ссылке</option>
+                        @if(Auth::check())
+                            <option value="private">Доступна только мне</option>
+                        @endif
                     </select>
                 </div>
                 <button type="submit" class="mt-auto flex-shrink-0 rounded-md pt-2 pb-2 pl-4 pr-4 bg-green-400">Создать
@@ -71,13 +74,6 @@
             </form>
         </div>
         <div>
-            @if(isset($link))
-                <div class="ml-2 w-80 bg-stone-200  text-center p-5 rounded text-center border-l-2 border-gray-500">
-                    <h3 class="text-md mb-5">Ваша ссылка на пасту: </h3>
-                    <p>{{ $link }}</p>
-                </div>
-            @endif
-
             <div class="ml-2 overflow-auto w-80 bg-stone-200 min-h-96 max-h-96  text-center p-5 rounded text-center border-l-2 border-gray-500">
                 <h2 class="text-lg mb-5">Опубликованные последние пасты</h2>
                 @if(isset($posts))
@@ -94,7 +90,26 @@
                 @endif
             </div>
         </div>
+        @if(Auth::check())
+            <div>
+                <div class="ml-2 overflow-auto w-80 bg-stone-200 min-h-96 max-h-96  text-center p-5 rounded text-center border-l-2 border-gray-500">
+                    <h2 class="text-lg mb-5">Мои пасты</h2>
 
+                        @if(isset($userPosts))
+                            @foreach($userPosts as $item)
+                                <div class="mb-3 text-left border-b-2 border-gray-300">
+                                    <div class="">
+                                        <a class="text-teal-500" href="{{ $item['link'] }}">{{ $item['title'] }}</a>
+                                        <p>Пользователь: <b>{{ $item['user_name'] }}</b></p>
+                                    </div>
+                                </div>
+                            @endforeach
+                        @else
+                            <p>Ни одной моей пасты не создано</p>
+                        @endif
+                </div>
+            </div>
+        @endif
     </div>
 </body>
 </html>
