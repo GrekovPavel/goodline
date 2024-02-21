@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use App\Jobs\DeleteExpiredPost;
 
 class PostController extends Controller
 {
@@ -56,6 +57,10 @@ class PostController extends Controller
         $post->update([
             'link' => substr(md5($post->id), 0, 8),
         ]);
+
+        if($post->expiration_time) {
+            DeleteExpiredPost::dispatch()->delay(now()->addMinutes($post->expiration_time));
+        }
 
         return redirect('/');
     }
