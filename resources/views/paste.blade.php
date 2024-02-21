@@ -16,9 +16,11 @@
     <div class=" min-h-96 text-center p-5 rounded">
         <ul>
             <li><a href="{{ route('index') }}">На главную</a></li>
+            @if(Auth::check())
+                <li><a href="{{ route('person') }}">Личная страница</a></li>
+            @endif
         </ul>
     </div>
-
     <div class="bg-stone-200 min-h-96 text-center p-5 rounded">
         <h1 class="text-xl mb-3 ">Моя паста</h1>
         <hr>
@@ -27,16 +29,16 @@
             <p>Содержимое: {{ $postData['content'] }}</p>
         @endif
     </div>
-
     <div>
-        <div class="ml-2 overflow-auto w-80 bg-stone-200 min-h-96 max-h-96  text-center p-5 rounded text-center border-l-2 border-gray-500">
+        <div
+            class="ml-2 overflow-auto w-80 bg-stone-200 min-h-96 max-h-96  text-center p-5 rounded text-center border-l-2 border-gray-500">
             <h2 class="text-lg mb-5">Опубликованные последние пасты</h2>
             @if(isset($publicPosts))
                 @foreach($publicPosts as $item)
                     <div class="mb-3 text-left border-b-2 border-gray-300">
                         <div class="">
                             <a class="text-teal-500" href="{{ $item['link'] }}">{{ $item['title'] }}</a>
-                            <p>Неизвестный автор</p>
+                            <p>Пользователь: <b>{{ $item['user_name'] }}</b></p>
                         </div>
                     </div>
                 @endforeach
@@ -45,8 +47,27 @@
             @endif
         </div>
     </div>
+    @if(Auth::check())
+        <div>
+            <div
+                class="ml-2 overflow-auto w-80 bg-stone-200 min-h-96 max-h-96  text-center p-5 rounded text-center border-l-2 border-gray-500">
+                <h2 class="text-lg mb-5">Мои пасты</h2>
 
+                @if(isset($userPosts))
+                    @foreach($userPosts as $item)
+                        <div class="mb-3 text-left border-b-2 border-gray-300">
+                            <div class="">
+                                <a class="text-teal-500" href="{{ $item['link'] }}">{{ $item['title'] }}</a>
+                                <p>Пользователь: <b>{{ $item['user_name'] }}</b></p>
+                            </div>
+                        </div>
+                    @endforeach
+                @else
+                    <p>Ни одной моей пасты не создано</p>
+                @endif
+            </div>
+        </div>
+    @endif
 </div>
-
 </body>
 </html>
