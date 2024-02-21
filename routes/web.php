@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [PostController::class, 'index'])->name('index');;
 Route::post('/store', [PostController::class, 'store']);
-Route::get('/person', [PostController::class, 'person'])->middleware('auth');
+Route::get('/person', [PostController::class, 'person'])->middleware('auth')->name('person');
 
 require __DIR__.'/auth.php';
 

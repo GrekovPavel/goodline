@@ -13,6 +13,14 @@
 </head>
 <body class="bg-slate-100">
 <div class="flex items-center justify-center h-screen p-3">
+    <div class=" min-h-96 text-center p-5 rounded">
+        <ul>
+            <li><a href="{{ route('index') }}">На главную</a></li>
+            @if(Auth::check())
+                <li><a href="{{ route('person') }}">Личная страница</a></li>
+            @endif
+        </ul>
+    </div>
     <div>
         <div
             class="ml-2 overflow-auto w-80 bg-stone-200 min-h-96 max-h-96  text-center p-5 rounded text-center border-l-2 border-gray-500">

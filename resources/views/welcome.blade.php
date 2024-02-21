@@ -18,6 +18,7 @@
                 @if(!Auth::check())
                     <li><a href="{{ route('login') }}">Войти в систему</a></li>
                 @else
+                    <li><a href="{{ route('person') }}">Личная страница</a></li>
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
                         <button type="submit" class="">

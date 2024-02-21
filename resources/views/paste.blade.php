@@ -16,6 +16,9 @@
     <div class=" min-h-96 text-center p-5 rounded">
         <ul>
             <li><a href="{{ route('index') }}">На главную</a></li>
+            @if(Auth::check())
+                <li><a href="{{ route('person') }}">Личная страница</a></li>
+            @endif
         </ul>
     </div>
     <div class="bg-stone-200 min-h-96 text-center p-5 rounded">
