@@ -70,7 +70,7 @@
                     @foreach($posts as $item)
                         <div class="mb-3 text-left border-b-2 border-gray-300">
                             <div class="">
-                                <a href="{{ $item['link'] }}">{{ $item['title'] }}</a>
+                                <a class="text-teal-500" href="{{ $item['link'] }}">{{ $item['title'] }}</a>
                                 <p>Неизвестный автор</p>
                             </div>
                         </div>
