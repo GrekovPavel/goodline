@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use App\Jobs\DeleteExpiredPost;
 
@@ -27,8 +28,10 @@ class PostController extends Controller
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
+        $userId = Auth::id();
+
         $post = Post::create([
-            'user_id' => 0,
+            'user_id' => $userId,
             'title' => $request->title,
             'content' => $request->content,
             'expiration_time' => $request->expiration_time,
@@ -76,7 +79,8 @@ class PostController extends Controller
             ->mapWithKeys(function ($item) {
                 return [
                     $item->id => [
-                        "user_id" => 0,
+                        "user_id" => $item->user_id,
+                        "user_name" => $item->user->name ?? "Гость",
                         "title" => $item->title,
                         "content" => $item->content,
                         "expiration_time" => $item->expiration_time,
