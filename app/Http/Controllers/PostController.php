@@ -72,6 +72,15 @@ class PostController extends Controller
         return view('paste', ['postData' => $postData, 'publicPosts' => $publicPosts, 'userPosts' => $userPosts]);
     }
 
+    public function person()
+    {
+        $publicPosts = $this->getPublicPosts();
+
+        $userPosts =  Auth::check() ? Post::where('user_id', Auth::id())->latest()->paginate(10) : [];
+
+        return view('dashboard', ['publicPosts' => $publicPosts, 'userPosts' => $userPosts]);
+    }
+
     private function getPublicPosts()
     {
         $post = new Post();
